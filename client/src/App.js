@@ -1,17 +1,16 @@
 import io from 'socket.io-client';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-const socket = io('localhost:8000');
+
 const App = () => {
-  // const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = useState('');
   const [tasks, setTasks] = useState([]);
   const [taskName, setTaskName] = useState('');
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log(socket);
-    });
-    // setSocket(socket);
+    // local WebSocket server running on port 8000 The second argument is options,  it is specifying that only the 'websocket' transport should be used (not long polling or other fallbacks).
+    const socket = io('ws://localhost:8000', { transports: ['websocket'] });
+    setSocket(socket);
 
     socket.on('updateData', (tasks) => {
       updateData(tasks);
@@ -75,7 +74,6 @@ const App = () => {
         <form id='add-task-form' onSubmit={(e) => submitForm(e)}>
           <input
             className='text-input'
-            autocomplete='off'
             type='text'
             placeholder='Type your description'
             id='task-name'
