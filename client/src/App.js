@@ -59,7 +59,7 @@ const App = () => {
 
         <ul className='tasks-section__list' id='tasks-list'>
           {tasks.map((task) => (
-            <li className='task'>
+            <li key={task.id} className='task'>
               {task.name}
               <button
                 className='btn btn--red'
